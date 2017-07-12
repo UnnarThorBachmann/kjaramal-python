@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Launamyndir</title>
+  <!--<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic" rel="stylesheet" type="text/css">-->
+  
+  <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap-theme.min.css">
+  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+  <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+  <body>
+ 
+
+  </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.3.13/d3.js"></script>
+  <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
+  <script type="text/javascript">
+      function draw(data) {
+        "use strict";
+          var margin = 75;
+          var width = 1400 - margin;
+          var height = 600 - margin;
+
+          var radius = 3;
+          var color = "blue";
+           d3.select("body")
+             .append("h2")
+             .text("Vöxtur launamismunar")
+
+          var svg = d3.select("body")
+            .append("svg")
+              .attr("width", width + margin)
+              .attr("height", height + margin)
+            .append('g')
+                .attr('class','chart');
+
+
+
+          data = data.filter(d => d.nemendafjoldi == 25 || d.synidaemi == "2013")    
+          data = data.map(function(d) {
+            var vidmid = data.filter(kennari => kennari.launaflokkur == "5" && kennari.synidaemi == d.synidaemi);
+            if (vidmid.length == 1) {
+              var referenceSalary = parseFloat(vidmid[0].laun);
+              d.mismunur = (parseFloat(d.laun/referenceSalary)-1)*100;
+              console.log(vidmid);
+            }
+            else {
+              var referenceSalary = (parseFloat(vidmid[0].laun) + parseFloat(vidmid[1].laun))/2;
+              d.mismunur = (parseFloat(d.laun/referenceSalary)-1)*100;
+            }
+            return d;
+          }); 
+          console.log(data);
+          d3.select("svg")
+            .selectAll("circle")
+            .data(data)
+            .enter()
+            .append("circle");
+      };
+  </script>
+  <script type="text/javascript">
+    d3.tsv("/data/kjaramal.tsv",draw);
+  </script>
+</html>

@@ -59,7 +59,7 @@ vinnuskylda = {'30 ára-': 720,
 '55-59 ára': 667,
 '60 ára+': 551}
 
-f = codecs.open('nidurstodur.txt','a', encoding='utf-8')  
+f = codecs.open('kjaramal.tsv','a', encoding='utf-8')  
 f.write("synidaemi\tlaunaflokkur\tthrep\taldursflokkur\tkennsluskylda\tskertur\tvinnumat\tryrnun\tafangafjoldi\teiningar\tnemendafjoldi\tvinnuskylda\tlaun\n")
 
 for aldur in aldursflokkar.keys():
@@ -69,9 +69,9 @@ for aldur in aldursflokkar.keys():
         laun = des + orlof
         laun /= 12
         grunn = float(toflur[u'2013'][lfthrep["launaflokkur"].decode(encoding='UTF-8')][lfthrep["threp"].decode(encoding='UTF-8')])
-        yfirvinnutimar = 1.3*18*(2*4*3-kennsluskylda[aldur])
+        yfirvinnutimar = 1.3*18*(2*4*3-kennsluskylda[aldur])/6
         laun += grunn
-        laun + yfirvinnutimar*0.010385*grunn
+        laun += yfirvinnutimar*0.010385*grunn
         
         
         skrifa(u'2013',lfthrep["launaflokkur"],lfthrep["threp"], aldur, kennsluskylda[aldur],u'false',yfirvinnutimar,0,4,4*3,0,0,laun,f)
