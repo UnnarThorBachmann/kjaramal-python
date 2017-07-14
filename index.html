@@ -10,6 +10,41 @@
   <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap-theme.min.css">
   <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
   <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+  <style>
+    h2 {
+        color: black;
+        text-align: center;
+      }
+
+      .axis {
+        font-family: arial;
+        font-size: 0.8em;
+      }
+
+      path {
+        fill: none;
+        stroke: black;
+        stroke-width: 2px;
+      }
+
+      .tick {
+        fill: none;
+        stroke: black;
+      }
+
+      circle {
+        opacity: 0.8;
+        stroke: black;
+        stroke-width: 1;
+       
+      }
+
+      .line_plot {
+        fill: none;
+        stroke: #4eb0bb;
+        stroke-width: 1px;
+      }
+  </style>
   <body>
  
 
@@ -19,32 +54,34 @@
   <script type="text/javascript">
       function draw(data) {
         "use strict";
-          var margin = 75;
-          var width = 1400 - margin;
+          var margin = 60;
+          var width = 1000 - margin;
           var height = 600 - margin;
 
           var radius = 3;
           var color = "blue";
+
+          
            d3.select("body")
              .append("h2")
-             .text("Vöxtur launamismunar")
+             .text("Vöxtur launamismunar");
+        
 
           var svg = d3.select("body")
             .append("svg")
-              .attr("width", width + margin)
-              .attr("height", height + margin)
+            .attr("width", width + margin)
+            .attr("height", height + margin)
             .append('g')
-                .attr('class','chart');
+            .attr('class','chart');
 
 
           // Filtering data.
-          data = data.filter(d => d.nemendafjoldi == 25 || d.synidaemi == "2013")    
+          console.log(data);
           data = data.map(function(d) {
             var vidmid = data.filter(kennari => kennari.launaflokkur == "5" && kennari.synidaemi == d.synidaemi);
             if (vidmid.length == 1) {
               var referenceSalary = parseFloat(vidmid[0].laun);
               d.mismunur = (parseFloat(d.laun/referenceSalary)-1)*100;
-              console.log(vidmid);
             }
             else {
               var referenceSalary = (parseFloat(vidmid[0].laun) + parseFloat(vidmid[1].laun))/2;
@@ -52,11 +89,7 @@
             }
             return d;
           }); 
-          d3.select("svg")
-            .selectAll("circle")
-            .data(data)
-            .enter()
-            .append("circle");
+          console.log(data);
 
           //percentage scale.
           var percentage_scale = d3.scale.linear()
@@ -65,43 +98,97 @@
 
           var percentage_axis = d3.svg.axis()
             .scale(percentage_scale)
-            .orient("left");
+            .orient("left")
+            .ticks(10);
 
           d3.select("svg")
             .append("g")
             .attr("class", "y axis")
-            .attr("transform", "translate(" + margin + ",30)")
+            .attr("transform", "translate(" + margin + ",0)")
             .call(percentage_axis);
 
 
           // ordinal axis
           var ordinal_scale = d3.scale.ordinal()
           .rangePoints([margin,width])
-          .domain(['','2013','Félagsgreinar','Íslenska','Raungreinar','Stærðfræði','Tungumál','']);
+          .domain(['','2013','Félagsgreinar','Íslenska','Raungreinar','Stærðfræði','Tungumál']);
           
 
-          var ordinal_axis = d3.svg.axis(50)
+          var ordinal_axis = d3.svg.axis()
             .scale(ordinal_scale)
             .orient("bottom");
+
 
            d3.select("svg")
             .append("g")
             .attr("class", "x axis")
-            .attr("transform", "translate(0," + height + ")")
+            .attr("transform", "translate(0," + (height-28) + ")")
             .call(ordinal_axis);
+          
+          var update = function(nemfjoldi) {
+            
+            var filtered = data.filter(d => d.nemendafjoldi == (nemfjoldi + "") || d.synidaemi == "2013"); 
+            //console.log(filtered);
+            
+            var circles = d3.select("svg").selectAll("circle").data(filtered);
+            //console.log(circles);
 
 
-          d3.selectAll("circle")
-          .attr('cx',function(d) {
-              console.log(ordinal_scale(d['synidaemi']));
-              return ordinal_scale(d['synidaemi']);
-          })
-          .attr('cy',function(d) {
-            return percentage_scale(d['mismunur']);
-          })
-          .attr('r',5)
-          .attr('fill','blue')
-      };
+            circles.enter().append("circle")
+            .attr('cx',function(d) {
+                if (d['aldursflokkur'] == '30 ára-')
+                  return ordinal_scale(d['synidaemi'])- 60;
+                else if (d['aldursflokkur'] == '30-37 ára')
+                  return ordinal_scale(d['synidaemi']) - 50;
+                else if (d['aldursflokkur'] == '38-54 ára')
+                  return ordinal_scale(d['synidaemi'])-40;  
+                else if (d['aldursflokkur'] == '55-60 ára')
+                  return ordinal_scale(d['synidaemi'])-30 ; 
+                else
+                  return ordinal_scale(d['synidaemi'])-20; 
+
+
+            })
+            .attr('cy',function(d) {
+              return percentage_scale(d['mismunur']);
+            })
+            .attr('r',5)
+            .attr('fill',function(d) {
+              var aldurslitir = {
+                '30 ára-': "#d7191c",
+                '30-37 ára': "#fdae61",
+                '38-54 ára':  "#ffffbf",
+                '55-59 ára': "#abd9e9",
+                '60 ára+': "#2c7bb6"
+              };
+              return aldurslitir[d['aldursflokkur']];
+            })
+            .attr("transform", "translate(50,0)");
+            
+            circles.exit().remove();
+
+          };
+        
+          var nemfjoldi = [];
+
+          for(var i = 15; i < 33; i++) {
+            nemfjoldi.push(i);
+          }
+          //console.log(nemfjoldi);
+
+          var fj_idx = 0;
+
+          var nem_interval = setInterval(function() {
+            update(nemfjoldi[fj_idx]);
+
+            fj_idx++;
+            //console.log(nemfjoldi[fj_idx]);
+            if(fj_idx == nemfjoldi.length) {
+                clearInterval(nem_interval);
+            }
+          }, 1000);
+
+     };
   </script>
   <script type="text/javascript">
     d3.tsv("/data/kjaramal.tsv",draw);
