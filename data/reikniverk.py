@@ -8,9 +8,12 @@ from synidaemi import d
 import math
 import sys
 from launatoflur import toflur
-
+key_idx = 0
 def skrifa(sd,launaflokkur,threp,aldur,kennsluskylda,skertur,vinnumat,ryrnun,fjoldi,einingar,nemfjoldi,vinnuskylda,laun,f):
-    uttak = sd
+    global key_idx
+    uttak = str(key_idx).decode(encoding='UTF-8')
+    uttak += "\t".decode(encoding='UTF-8')
+    uttak += sd
     uttak += "\t".decode(encoding='UTF-8')
     uttak += launaflokkur.decode(encoding='UTF-8')
     uttak += "\t".decode(encoding='UTF-8')
@@ -36,7 +39,7 @@ def skrifa(sd,launaflokkur,threp,aldur,kennsluskylda,skertur,vinnumat,ryrnun,fjo
     uttak += "\t".decode(encoding='UTF-8')
     uttak += str(laun).decode(encoding='UTF-8')
     uttak += "\n".decode(encoding='UTF-8')
-
+    key_idx += 1
     f.write(uttak)
     
 #reload(sys)  # Reload is a hack
@@ -60,8 +63,7 @@ vinnuskylda = {'30 ára-': 720,
 '60 ára+': 551}
 
 f = codecs.open('kjaramal.tsv','a', encoding='utf-8')  
-f.write("synidaemi\tlaunaflokkur\tthrep\taldursflokkur\tkennsluskylda\tskertur\tvinnumat\tryrnun\tafangafjoldi\teiningar\tnemendafjoldi\tvinnuskylda\tlaun\n")
-
+f.write("key\tsynidaemi\tlaunaflokkur\tthrep\taldursflokkur\tkennsluskylda\tskertur\tvinnumat\tryrnun\tafangafjoldi\teiningar\tnemendafjoldi\tvinnuskylda\tlaun\n")
 for aldur in aldursflokkar.keys():
     for lfthrep in aldursflokkar[aldur]:
         des = float(toflur[u'desemberuppbót'][u'2013'])

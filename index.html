@@ -76,7 +76,6 @@
 
 
           // Filtering data.
-          console.log(data);
           data = data.map(function(d) {
             var vidmid = data.filter(kennari => kennari.launaflokkur == "5" && kennari.synidaemi == d.synidaemi);
             if (vidmid.length == 1) {
@@ -128,12 +127,14 @@
           var update = function(nemfjoldi) {
             
             var filtered = data.filter(d => d.nemendafjoldi == (nemfjoldi + "") || d.synidaemi == "2013"); 
-            //console.log(filtered);
+            console.log(filtered);
             
-            var circles = d3.select("svg").selectAll("circle").data(filtered);
-            //console.log(circles);
+            var circles = svg.selectAll("circle").data(filtered, function(d) {
+              return d['key'];
+            });
+            console.log(circles);
 
-
+            circles.exit().remove();
             circles.enter().append("circle")
             .attr('cx',function(d) {
                 if (d['aldursflokkur'] == '30 ára-')
@@ -165,7 +166,7 @@
             })
             .attr("transform", "translate(50,0)");
             
-            circles.exit().remove();
+            
 
           };
         
