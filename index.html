@@ -44,10 +44,37 @@
         stroke: #4eb0bb;
         stroke-width: 1px;
       }
+      .label {
+        width: 150px;
+        color: black;
+        text-align: left;
+      }
+      #range {
+       -webkit-appearance: slider-vertical;
+        width: 20px;
+        height: 100px;
+      }
+      div.left: {
+        width: 80%;
+        float: left;
+      }
+      div.right {
+        width: 20%;
+      }
+      .container {
+        display: flex;
+        flex-direction: row;
+      }
   </style>
   <body>
- 
-
+    <h2>Vöxtur launamismunar fyrir fjóra hópa</h2>
+    <div class="container">
+      <div class="left">
+      </div>
+      <div class="right">
+        <input id="range" type="range" min="15" max="25" value="25" step="1" onchange="update(this.value)" />
+      </div>
+    </div>
   </body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.3.13/d3.js"></script>
   <!--<script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>-->
@@ -61,13 +88,19 @@
           var radius = 3;
           var color = "blue";
 
-          
-           d3.select("body")
-             .append("h2")
-             .text("Vöxtur launamismunar fyrir fjóra hópa");
-        
+          var tooltip = d3.select("body")
+            .append("div")
+            .attr("class","label")
+            .style("position", "absolute")
+            .style("z-index", "10")
+            .style("visibility", "hidden")
+            .style("background-color","#fff7bc")
+            .text("a simple tooltip");
 
-          var svg = d3.select("body")
+            
+            
+
+          var svg = d3.select(".left")
             .append("svg")
             .attr("width", width + margin)
             .attr("height", height + margin)
@@ -88,12 +121,11 @@
             }
             return d;
           }); 
-          console.log(data);
 
           //percentage scale.
           var percentage_scale = d3.scale.linear()
             .range([height, margin])
-            .domain([-5,80]);
+            .domain([-5,70]);
 
           var percentage_axis = d3.svg.axis()
             .scale(percentage_scale)
@@ -109,7 +141,7 @@
 
           // ordinal axis
           var ordinal_scale = d3.scale.ordinal()
-          .rangePoints([margin,width])
+          .rangePoints([margin,width-margin])
           .domain(['','2013','Félagsgreinar','Íslenska','Raungreinar','Stærðfræði','Tungumál']);
           
 
@@ -121,18 +153,16 @@
            d3.select("svg")
             .append("g")
             .attr("class", "x axis")
-            .attr("transform", "translate(0," + (height-28) + ")")
+            .attr("transform", "translate(0," + (height-31) + ")")
             .call(ordinal_axis);
           
           var update = function(nemfjoldi) {
             
             var filtered = data.filter(d => d.nemendafjoldi == (nemfjoldi + "") || d.synidaemi == "2013"); 
-            console.log(filtered);
             
             var circles = svg.selectAll("circle").data(filtered, function(d) {
               return d['key'];
             });
-            console.log(circles);
 
             circles.exit().remove();
             circles.enter().append("circle")
@@ -164,15 +194,37 @@
               };
               return aldurslitir[d['aldursflokkur']];
             })
-            .attr("transform", "translate(50,0)");
-            
+            .attr("transform", "translate(50,0)")
+            .attr("id",function(d) {
+              return d['key'] + "";
+            })
+            .on("mouseover", function() {
+              var id = this.id;
+              var item = data.filter(d=> d.key == id)[0];
+              tooltip[0][0].innerHTML = "Aldursflokkur: " + item.aldursflokkur + "<br>Mismunur: " + parseInt(item.mismunur) + "%<br>";
+              tooltip[0][0].innerHTML += "Launaflokkur: " + item.launaflokkur +", þrep: " + item.threp + "<br>";
+              tooltip[0][0].innerHTML += "Laun: " + parseFloat(item.laun).toFixed(0) + "<br>";
+              if (item.synidaemi != "2013") {
+                tooltip[0][0].innerHTML += "Vinnumat: " + parseFloat(item.vinnumat).toFixed(0) + "<br>";
+                console.log(item.skertur);
+                tooltip[0][0].innerHTML += (item.skertur == "True" ? "Skert vinnumat": "Óskert vinnumat");
+
+              }
+              else {
+                tooltip[0][0].innerHTML += "Kennsluskylda: " + item.kennsluskylda;
+
+              }
+              return tooltip.style("visibility", "visible");
+            })
+            .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
+            .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
             
 
           };
         
           var nemfjoldi = [];
 
-          for(var i = 15; i < 33; i++) {
+          for(var i = 15; i < 26; i++) {
             nemfjoldi.push(i);
           }
           //console.log(nemfjoldi);
@@ -190,9 +242,19 @@
             //console.log(nemfjoldi[fj_idx]);
             if(fj_idx == nemfjoldi.length) {
                 clearInterval(nem_interval);
+                
             }
           }, 1000);
-
+          /*
+          d3.select(".right")
+                  .append("input")
+                  .attr("type","range")
+                  .attr("id","range")
+                  .attr("min","15")
+                  .attr("max","32")
+                  .attr("step","1")
+                  .attr("value","25")
+                  .attr("onchange","update(this.value)");*/
      };
   </script>
   <script type="text/javascript">
