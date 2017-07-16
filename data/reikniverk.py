@@ -66,43 +66,45 @@ f = codecs.open('kjaramal.tsv','a', encoding='utf-8')
 f.write("key\tsynidaemi\tlaunaflokkur\tthrep\taldursflokkur\tkennsluskylda\tskertur\tvinnumat\tryrnun\tafangafjoldi\teiningar\tnemendafjoldi\tvinnuskylda\tlaun\n")
 for aldur in aldursflokkar.keys():
     for lfthrep in aldursflokkar[aldur]:
-        des = float(toflur[u'desemberuppbót'][u'2013'])
-        orlof = float(toflur[u'orlofsuppbót'][u'2013'])
-        laun = des + orlof
-        laun /= 12
-        grunn = float(toflur[u'2013'][lfthrep["launaflokkur"].decode(encoding='UTF-8')][lfthrep["threp"].decode(encoding='UTF-8')])
-        yfirvinnutimar = 1.3*18*(2*4*3-kennsluskylda[aldur])/6
-        laun += grunn
-        laun += yfirvinnutimar*0.010385*grunn
+        for afangafj in [4,5]:
+            des = float(toflur[u'desemberuppbót'][u'2013'])
+            orlof = float(toflur[u'orlofsuppbót'][u'2013'])
+            laun = des + orlof
+            laun /= 12
+            grunn = float(toflur[u'2013'][lfthrep["launaflokkur"].decode(encoding='UTF-8')][lfthrep["threp"].decode(encoding='UTF-8')])
+            yfirvinnutimar = 1.3*18*(2*afangafj*3-kennsluskylda[aldur])/6
+            laun += grunn
+            laun += yfirvinnutimar*0.010385*grunn
         
         
-        skrifa(u'2013',lfthrep["launaflokkur"],lfthrep["threp"], aldur, kennsluskylda[aldur],u'false',yfirvinnutimar,0,4,4*3,0,0,laun,f)
+            skrifa(u'2013',lfthrep["launaflokkur"],lfthrep["threp"], aldur, kennsluskylda[aldur],u'false',yfirvinnutimar,0,afangafj,afangafj*3,0,0,laun,f)
         
             
 for nemfjoldi in range(15,33):
     for sd in d.keys():
         for aldur in aldursflokkar.keys():
             for lfthrep in aldursflokkar[aldur]:
-                for skertur in [True,False]:
-                    kennari = Kennari('Unnar',d)
-                    for i in range(4):
+                for afangafj in [4,5]:
+                    for skertur in [True,False]:
+                        kennari = Kennari('Unnar',d)
+                        for i in range(afangafj):
+                            if skertur:
+                                kennari.add_class(Afangi("a",3,nemfjoldi,sd,d))           
+                            else:
+                                kennari.add_class(Afangi(str(i),3,nemfjoldi,sd,d))
                         if skertur:
-                            kennari.add_class(Afangi("a",3,nemfjoldi,sd,d))           
-                        else:
-                            kennari.add_class(Afangi(str(i),3,nemfjoldi,sd,d))
-                    if skertur:
-                        kennari.discount()
+                            kennari.discount()
                    
-                    des = float(toflur[u'desemberuppbót'][u'2016'])
-                    orlof = float(toflur[u'orlofsuppbót'][u'2016'])                                          
-                    grunn = float(toflur[u'2016'][lfthrep["launaflokkur"].decode(encoding='UTF-8')][lfthrep["threp"].decode(encoding='UTF-8')])
+                        des = float(toflur[u'desemberuppbót'][u'2016'])
+                        orlof = float(toflur[u'orlofsuppbót'][u'2016'])                                          
+                        grunn = float(toflur[u'2016'][lfthrep["launaflokkur"].decode(encoding='UTF-8')][lfthrep["threp"].decode(encoding='UTF-8')])
                     
-                    laun = float(des)
-                    laun += float(orlof)
-                    laun /= 12
-                    laun += grunn
-                    laun += 0.010385*float(max(0,kennari.vinnumat()-vinnuskylda[aldur]))*grunn/6
-                    skrifa(sd,
+                        laun = float(des)
+                        laun += float(orlof)
+                        laun /= 12
+                        laun += grunn
+                        laun += 0.010385*float(max(0,kennari.vinnumat()-vinnuskylda[aldur]))*grunn/6
+                        skrifa(sd,
                            lfthrep["launaflokkur"],
                            lfthrep["threp"],
                            aldur,
@@ -110,8 +112,8 @@ for nemfjoldi in range(15,33):
                            skertur,
                            kennari.vinnumat(),
                            kennari.ryrnun,
-                           4,
-                           4*3,
+                           afangafj,
+                           afangafj*3,
                            nemfjoldi,
                            vinnuskylda[aldur],
                            laun,

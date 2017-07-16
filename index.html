@@ -266,7 +266,7 @@
 
           // Filtering data.
           data = data.map(function(d) {
-            var vidmid = data.filter(kennari => kennari.launaflokkur == "5" && kennari.synidaemi == d.synidaemi && kennari.nemendafjoldi == d.nemendafjoldi);
+            var vidmid = data.filter(kennari => kennari.afangafjoldi == d.afangafjoldi && kennari.launaflokkur == "5" && kennari.synidaemi == d.synidaemi && kennari.nemendafjoldi == d.nemendafjoldi);
             if (vidmid.length == 1) {
               var referenceSalary = parseFloat(vidmid[0].laun);
               d.mismunur = (parseFloat(d.laun/referenceSalary)-1)*100;
@@ -358,18 +358,24 @@
               .attr("class", "right_header")
               .attr("transform", "translate(" + width + "," + (height/3) + ")")
               .append('text')
-              .text(function(d) {
-                return 'Fjöldi ' + 15;
-              })
+              .text('Fjöldi ' + 15)
+              .attr('font-size','20px'); 
+
+          var right_header2 = d3.selectAll('svg').append("g")
+              .attr("class", "right_header2")
+              .attr("transform", "translate(" + width + "," + (height/3 + 30) + ")")
+              .append('text')
+              .text('Hópar ' + 4)
               .attr('font-size','20px'); 
           
                 
-          var update = function(nemfjoldi,afangafjoldi) {
+          var update = function(nemfjoldi) {
           
            right_header.text("Fjöldi " + nemfjoldi);
+           right_header2.text("Hópar " + afangafjoldisbr1);
 
             nemfjoldisbr1 = nemfjoldi;
-            var filtered = data.filter(d => d.nemendafjoldi == (nemfjoldi + "") || d.synidaemi == "2013"); 
+            var filtered = data.filter(d => (d.nemendafjoldi == (nemfjoldi + "") || d.synidaemi == "2013") && d.afangafjoldi == (afangafjoldisbr1 + "")); 
             
             var circles = svg.selectAll("circle").data(filtered, function(d) {
               return d['key'];
@@ -430,48 +436,61 @@
             .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
             .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
         
-          };
-        
-          var nemfjoldi = [];
+          };// end of update
+          update(15);
+          /*
+          var animate = function () {
+            var nemfjoldi = [];
 
-          for(var i = 15; i < 26; i++) {
-            nemfjoldi.push(i);
-          }
+            for(var i = 15; i < 26; i++) {
+              nemfjoldi.push(i);
+            }
 
-          var fj_idx = 0;
+            var fj_idx = 0;
 
-          var nem_interval = setInterval(function() {
-            
-            update(nemfjoldi[fj_idx],afangafjoldisbr1);
+            var nem_interval = setInterval(function() {
+              update(nemfjoldi[fj_idx]);
              
-
-            fj_idx++;
-            if(fj_idx == nemfjoldi.length) {
+              fj_idx++;
+              if(fj_idx == nemfjoldi.length) {
                 clearInterval(nem_interval);
                 
-            }
-          }, 1000);
+              }
+            }, 1000);
+          };*/
+          //animate();
           $('#minnka').on('click', function () {
-          if (nemfjoldisbr1 > 15) {
-            nemfjoldisbr1 -= 1;
-            update(nemfjoldisbr1,afangafjoldisbr1);
-          }
-          else {
+            if (nemfjoldisbr1 > 15) {
+              nemfjoldisbr1 -= 1;
+              update(nemfjoldisbr1);
+            }
+            else {
              nemfjoldisbr1 = 15;
              update(nemfjoldisbr1,afangafjoldisbr1);
-          }
-        });
-        $('#haekka').on('click', function () {
-          if (nemfjoldisbr1 < 32) {
-            nemfjoldisbr1 += 1;
-            update(nemfjoldisbr1,afangafjoldisbr1);
-          }
-          else {
-             nemfjoldisbr1 = 32;
-             update(nemfjoldisbr1,afangafjoldisbr1);
-          }
-        });  
-        
+            }
+          });
+          $('#haekka').on('click', function () {
+            if (nemfjoldisbr1 < 32) {
+              nemfjoldisbr1 += 1;
+              update(nemfjoldisbr1);
+            }
+            else {
+              nemfjoldisbr1 = 32;
+              update(nemfjoldisbr1);
+            }
+          });  
+          $('#fjorir').on('click', function () {
+            afangafjoldisbr1 = 4;
+            update(nemfjoldisbr1);
+
+          });
+          $('#fimm').on('click', function () {
+            afangafjoldisbr1 = 5;
+            update(nemfjoldisbr1);
+
+          });
+          
+          
          
         };//end of draw
         
