@@ -198,14 +198,14 @@
       padding-right: 5%;
 
     }
+    svg {
+      width: 100%;
+    }
   </style>
   <body>
-    <h2>Vöxtur launamismunar fyrir fjóra hópa</h2>
     <div class="container">
         
         <div class="yfirtafla" id="h4">
-          <div id="h4Teikniflotur">
-          </div>
           <div class="takkar">
             <div class="btn-group btn-group-justified" role="group" aria-label="...">
               <div class="btn-group" role="group">
@@ -226,15 +226,19 @@
               </div>
             </div>
           </div>    
+          <div id="h4Teikniflotur">
+          </div>
         </div>
     </div>
   </body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.3.13/d3.js"></script>
   <!--<script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>-->
   <script type="text/javascript">
+      var nemfjoldisbr1 = 15;
+      var afangafjoldisbr1 = 4;
+
       function draw(data) {
         "use strict";
-          var nemfjoldisbr1 = 15;
 
           var margin = 60;
           var width = 1000 - margin;
@@ -249,8 +253,8 @@
             .style("position", "absolute")
             .style("z-index", "10")
             .style("visibility", "hidden")
-            .style("background-color","#fff7bc")
-            .text("a simple tooltip");
+            .style("background-color","#fdae6b")
+            .text("");
 
           var svg = d3.select("#h4Teikniflotur")
             .append("svg")
@@ -307,8 +311,63 @@
             .attr("transform", "translate(0," + (height-31) + ")")
             .call(ordinal_axis);
           
-          var update = function(nemfjoldi) {
-            
+          var aldursflokkar = ['30 ára-','30-37 ára','38-54 ára','55-59 ára','60 ára+'];
+   
+          var legend = svg.append("g")
+              .attr("class", "legend")
+              .attr("transform", "translate(" + width + "," + 20 + ")")
+              .selectAll("g")
+              .data(['30 ára-','30-37 ára','38-54 ára','55-59 ára','60 ára+'])
+              .enter().append("g");
+
+          legend.append("rect")
+              .attr('width','10')
+              .attr('height','10')
+              .attr('y', function(d,i) {
+                return i*100/5 + 40;
+              })
+              .style('fill',function(d,i) {
+                var aldurslitir = ["#d7191c","#fdae61","#ffffbf","#abd9e9","#2c7bb6"];
+                return aldurslitir[i];
+          });
+          
+          legend.append("text")
+              .attr("x",20)
+              .attr("y", function(d,i) {
+                return i*100/5 + 50;
+              })
+              .text(function(d) {
+                  return d;
+          });
+
+
+          var header = d3.select('svg').append("g")
+              .attr("class", "header")
+              .attr("transform", "translate(" + (width/2) + "," + 40 + ")")
+              .selectAll("g")
+              .data(['Vöxtur launamismunar'])
+              .enter().append("g");
+
+          header.append("text")
+            .text(function(d) {
+              return d;
+            })
+            .attr('font-size','24px'); 
+
+          var right_header = d3.selectAll('svg').append("g")
+              .attr("class", "right_header")
+              .attr("transform", "translate(" + width + "," + (height/3) + ")")
+              .append('text')
+              .text(function(d) {
+                return 'Fjöldi ' + 15;
+              })
+              .attr('font-size','20px'); 
+          
+                
+          var update = function(nemfjoldi,afangafjoldi) {
+          
+           right_header.text("Fjöldi " + nemfjoldi);
+
             nemfjoldisbr1 = nemfjoldi;
             var filtered = data.filter(d => d.nemendafjoldi == (nemfjoldi + "") || d.synidaemi == "2013"); 
             
@@ -370,73 +429,7 @@
             })
             .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
             .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
-            
-            var aldursflokkar = ['30 ára-','30-37 ára','38-54 ára','55-59 ára','60 ára+'];
-            /*
-            svg.selectAll("rect")
-              .data(aldursflokkar)
-              .enter()
-              .append("rect")
-              .attr('width','10')
-              .attr('height','10')
-              .attr('x',width)
-              .attr('y',function(d) {
-                  var y = {
-                  '30 ára-': 50,
-                  '30-37 ára': 70,
-                  '38-54 ára':  90,
-                  '55-59 ára': 110,
-                  '60 ára+': 130
-                };
-              return y[d];
-              })
-              .style('fill',function(d) {
-                var aldurslitir = {
-                  '30 ára-': "#d7191c",
-                  '30-37 ára': "#fdae61",
-                  '38-54 ára':  "#ffffbf",
-                  '55-59 ára': "#abd9e9",
-                  '60 ára+': "#2c7bb6"
-                };
-              return aldurslitir[d];
-            })
-            
-            var legend = svg.append('g')
-              .attr("class", "legend")
-              .attr("transform", "translate(" + (width - 100) + "," + 20 + ")")
-              .selectAll('g')
-              .data(aldursflokkar)
-              .enter()
-              .append('g')*/
-          var legend = svg.append("g")
-              .attr("class", "legend")
-              .attr("transform", "translate(" + width + "," + 20 + ")")
-              .selectAll("g")
-              .data(['30 ára-','30-37 ára','38-54 ára','55-59 ára','60 ára+'])
-              .enter().append("g");
-
-          legend.append("rect")
-              .attr('width','10')
-              .attr('height','10')
-              .attr('y', function(d,i) {
-                return i*100/5;
-              })
-              .style('fill',function(d,i) {
-                var aldurslitir = ["#d7191c","#fdae61","#ffffbf","#abd9e9","#2c7bb6"];
-                return aldurslitir[i];
-              });
-          
-          legend.append("text")
-              .attr("x",20)
-              .attr("y", function(d,i) {
-                return i*100/5 + 10;
-              })
-              .text(function(d) {
-                  return d;
-              });
-              
-              
-
+        
           };
         
           var nemfjoldi = [];
@@ -444,15 +437,12 @@
           for(var i = 15; i < 26; i++) {
             nemfjoldi.push(i);
           }
-          //console.log(nemfjoldi);
 
           var fj_idx = 0;
 
           var nem_interval = setInterval(function() {
-            d3.select("body")
-             .selectAll("h2")
-             .text("Vöxtur launamismunar fyrir fjóra hópa. Fjöldi " + nemfjoldi[fj_idx] + ".");
-            update(nemfjoldi[fj_idx]);
+            
+            update(nemfjoldi[fj_idx],afangafjoldisbr1);
              
 
             fj_idx++;
@@ -461,22 +451,30 @@
                 
             }
           }, 1000);
-
-        
-         
-        };//end of draw
-        $('#minnka').on('click', function () {
+          $('#minnka').on('click', function () {
           if (nemfjoldisbr1 > 15) {
             nemfjoldisbr1 -= 1;
-            update(nemfjoldisbr1);
+            update(nemfjoldisbr1,afangafjoldisbr1);
+          }
+          else {
+             nemfjoldisbr1 = 15;
+             update(nemfjoldisbr1,afangafjoldisbr1);
           }
         });
         $('#haekka').on('click', function () {
           if (nemfjoldisbr1 < 32) {
             nemfjoldisbr1 += 1;
-            update(nemfjoldisbr1);
+            update(nemfjoldisbr1,afangafjoldisbr1);
+          }
+          else {
+             nemfjoldisbr1 = 32;
+             update(nemfjoldisbr1,afangafjoldisbr1);
           }
         });  
+        
+         
+        };//end of draw
+        
 
     
   </script>
