@@ -2,7 +2,7 @@
 
 (
   function(exports) {
-          exports.name = "mynd2";
+          exports.name = "mynd1";
           exports.margin = 60;
           exports.width = 1000 - exports.margin;
           exports.height = 600 - exports.margin;
@@ -10,7 +10,7 @@
           exports.radius = 3;
           exports.aldursflokkar = ['30 ára-','30-37 ára','38-54 ára','55-59 ára','60 ára+'];
 
-          exports.teikniflotur = d3.select("#teikniflotur2")
+          exports.teikniflotur = d3.select("#teikniflotur1")
             .append("svg")
             .attr("width", exports.width + exports.margin)
             .attr("height", exports.height + exports.margin)
@@ -19,7 +19,7 @@
 
           exports.percentage_scale = d3.scale.linear()
               .range([exports.height, exports.margin])
-              .domain([-5,70]);
+              .domain([-5,120]);
 
           exports.percentage_axis = d3.svg.axis()
             .scale(exports.percentage_scale)
@@ -35,8 +35,8 @@
          
           // ordinal axis
           exports.ordinal_scale = d3.scale.ordinal()
-          .rangePoints([exports.margin,exports.width-exports.margin])
-          .domain(['','2013','Félagsgreinar','Íslenska','Raungreinar','Stærðfræði','Tungumál']);
+          .rangePoints([exports.margin, exports.width-exports.margin])
+          .domain(['','30 ára-','30-37 ára','38-54 ára','55-59 ára','60 ára+']);
           
 
           exports.ordinal_axis = d3.svg.axis()
@@ -47,7 +47,7 @@
           exports.teikniflotur
             .append("g")
             .attr("class", "x axis")
-            .attr("transform", "translate(0," + (exports.height-31) + ")")
+            .attr("transform", "translate(0," + (exports.height-23) + ")")
             .call(exports.ordinal_axis);
           
 
@@ -69,7 +69,7 @@
               .attr("class", "header")
               .attr("transform", "translate(" + (exports.width/3) + "," + 40 + ")")
               .selectAll("g")
-              .data(['Launamismunur í % eftir sýnidæmum'])
+              .data(['Launavöxtur í % síðan 2013'])
               .enter().append("g");
 
           exports.header.append("text")
@@ -109,34 +109,33 @@
                           .y(function(d) { return d.y; })
                          .interpolate("linear");
 
-            for (var i = 0; i < 7; i++) {
-              exports.lineData = [ { "x": 60,   "y": 60 + i*64},  { "x": exports.width-10,  "y": 60+i*64}];
+            for (var i = 0; i < 12; i++) {
+              exports.lineData = [ { "x": 60,   "y": 60 + i*38.45},  { "x": exports.width-10,  "y": 60+i*38.45}];
               exports.lineGraph = exports.teikniflotur.append("path")
                             .attr('class','line')
                             .attr("d", exports.lineFunction(exports.lineData))
                             
               }
           exports.x = function(d) {
-                if (d['aldursflokkur'] == '30 ára-')
-                  return exports.ordinal_scale(d['synidaemi'])- 60;
-                else if (d['aldursflokkur'] == '30-37 ára')
-                  return exports.ordinal_scale(d['synidaemi']) - 50;
-                else if (d['aldursflokkur'] == '38-54 ára')
-                  return exports.ordinal_scale(d['synidaemi'])-40;  
-                else if (d['aldursflokkur'] == '55-60 ára')
-                  return exports.ordinal_scale(d['synidaemi'])-30 ; 
+                if (d['synidaemi'] == 'Stærðfræði')
+                  return exports.ordinal_scale(d['aldursflokkur'])- 40;
+                else if (d['synidaemi'] == 'Tungumál')
+                  return exports.ordinal_scale(d['aldursflokkur']) - 30;
+                else if (d['synidaemi'] == 'Félagsgreinar')
+                  return exports.ordinal_scale(d['aldursflokkur'])-20;  
+                else if (d['synidaemi'] == 'Íslenska')
+                  return exports.ordinal_scale(d['aldursflokkur'])-10 ; 
                 else
-                  return exports.ordinal_scale(d['synidaemi'])-20; 
+                  return exports.ordinal_scale(d['aldursflokkur']); 
           }
           exports.tooltipFunction = function(tooltip,data,id,item) {
               
               var item = data.filter(d=> d.key == id)[0];
-              tooltip[0][0].innerHTML = "Aldursflokkur: " + item.aldursflokkur + "<br>Mismunur: " + parseInt(item.mismunur2) + "%<br>";
+              tooltip[0][0].innerHTML = "Sýnidæmi: " + item.synidaemi + "<br>Mismunur: " + parseInt(item.mismunur1) + "%<br>";
               tooltip[0][0].innerHTML += "Launaflokkur: " + item.launaflokkur +", þrep: " + item.threp + "<br>";
               tooltip[0][0].innerHTML += "Laun: " + parseFloat(item.laun).toFixed(0) + "<br>";
               if (item.synidaemi != "2013") {
                 tooltip[0][0].innerHTML += "Vinnumat: " + parseFloat(item.vinnumat).toFixed(0) + "<br>";
-                console.log(item.skertur);
                 tooltip[0][0].innerHTML += (item.skertur == "True" ? "Skert vinnumat": "Óskert vinnumat");
 
               }
@@ -146,7 +145,7 @@
               }
               return tooltip.style("visibility", "visible");
             };
-            exports.pr_scale = function(d) {
-              return this.percentage_scale(d['mismunur2']);
+          exports.pr_scale = function(d) {
+              return this.percentage_scale(d['mismunur1']);
             };
-})(this.mynd2 = {})
+})(this.mynd1 = {})
