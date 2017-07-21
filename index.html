@@ -315,24 +315,24 @@
           <div class="takkar">
             <div class="btn-group btn-group-justified" role="group" aria-label="...">
               <div class="btn-group" role="group">
-                <button type="button" class="btn btn-primary" id="fjorir2">4 hópar</button>
+                <button type="button" class="btn btn-primary" id="fjorir1">4 hópar</button>
               </div>
               <div class="btn-group" role="group">
-                <button type="button" class="btn btn-primary" id="fimm2">5 hópar</button>
+                <button type="button" class="btn btn-primary" id="fimm1">5 hópar</button>
               </div>
               <div class="btn-group" role="group">
-                <button type="button" class="btn btn-primary" aria-label="left" id="minnka2">
+                <button type="button" class="btn btn-primary" aria-label="left" id="minnka1">
                   <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
                 </button>
               </div>
               <div class="btn-group" role="group">
-                <button type="button" class="btn btn-primary takki" aria-label="right" id="haekka2">
+                <button type="button" class="btn btn-primary takki" aria-label="right" id="haekka1">
                   <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                 </button>
               </div>
             </div>
           </div>    
-          <div id="teikniflotur2">
+          <div id="teikniflotur1">
           </div>
         </div>
         <div class="texti">
@@ -348,8 +348,7 @@
   </body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.3.13/d3.js"></script>
   <!--<script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>-->
-  <script src="init2.js"></script>
-  <!--<script src="init.js"></script>-->
+  <script src="init.js"></script>
 
   <script type="text/javascript">
       var nemfjoldisbr1 = 15;
@@ -370,6 +369,7 @@
 
 
           // manipulating data
+          /*
           data = data.map(function(d) {
             var vidmid = data.filter(kennari => kennari.afangafjoldi == d.afangafjoldi && kennari.launaflokkur == "5" && kennari.synidaemi == d.synidaemi && kennari.nemendafjoldi == d.nemendafjoldi);
             if (vidmid.length == 1) {
@@ -381,17 +381,16 @@
               d.mismunur2 = (parseFloat(d.laun/referenceSalary)-1)*100;
             }
             return d;
-          }); 
-          /*
-          data1 = data.map(function(k) {
-            var vidmid1 = data.filter(kennari => kennari.launaflokkur == k.launaflokkur && kennari.aldursflokkur == k.aldursflokkur && kennari.synidaemi == '2013');
-            console.log(vidmid1.length);
+          });*/
+          
+          data = data.map(function(k) {
+            var vidmid1 = data.filter(kennari => kennari.launaflokkur == k.launaflokkur && kennari.aldursflokkur == k.aldursflokkur && kennari.afangafjoldi == k.afangafjoldi && kennari.synidaemi == '2013');
             var referenceSalary1 = parseFloat(vidmid1[0].laun);
             k.mismunur1 = (parseFloat(k.laun/referenceSalary1)-1)*100;
           
             return k;
           }); 
-          var data1 = data1.filter(k => k.synidaemi != '2013');*/
+          var data = data.filter(k => k.synidaemi != '2013');
           
           var update = function(nemfjoldi,afangafjoldi,mynd,data) {
             
@@ -399,7 +398,7 @@
             mynd.right_header.text("Fjöldi " + nemfjoldi);
             mynd.right_header2.text("Hópar " + afangafjoldi);
 
-            var filtered = data.filter(d => (d.nemendafjoldi == (nemfjoldi + "") || d.synidaemi == "2013") && d.afangafjoldi == (afangafjoldi + "")); 
+            var filtered = data.filter(d => d.nemendafjoldi == (nemfjoldi + "")  &&  d.afangafjoldi == (afangafjoldi + "")); 
             
             var circles = mynd.teikniflotur.selectAll("circle").data(filtered, function(d) {
               return d['key'];
@@ -434,71 +433,42 @@
             .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
         
           };// end of update
-          update(nemfjoldisbr2,afangafjoldisbr2,mynd2,data);
-          //update(nemfjoldisbr1,afangafjoldisbr1,mynd1,data1);
-          $('#minnka2').on('click', function () {
-            if (nemfjoldisbr2 > 15) {
-              nemfjoldisbr2 -= 1;
-              update(nemfjoldisbr2,afangafjoldisbr2,mynd2,data);
-            }
-            else {
-             nemfjoldisbr2 = 15;
-             update(nemfjoldisbr2,afangafjoldisbr2,mynd2,data);
+          //update(nemfjoldisbr2,afangafjoldisbr2,mynd2,data);
+          update(nemfjoldisbr1,afangafjoldisbr1,mynd,data);
+          
 
-            }
-          });
-          $('#haekka2').on('click', function () {
-            if (nemfjoldisbr2 < 32) {
-              nemfjoldisbr2 += 1;
-              update(nemfjoldisbr2,afangafjoldisbr2,mynd2,data);
-
-            }
-            else {
-              nemfjoldisbr2 = 32;
-              update(nemfjoldisbr2,afangafjoldisbr2,mynd2,data);
-            }
-          });  
-          $('#fjorir2').on('click', function () {
-            afangafjoldisbr2 = 4;
-            update(nemfjoldisbr2,afangafjoldisbr2,mynd2,data);
-          });
-          $('#fimm2').on('click', function () {
-            afangafjoldisbr2 = 5;
-            update(nemfjoldisbr2,afangafjoldisbr2,mynd2,data);
-
-          });
-          /*
+          
           $('#minnka1').on('click', function () {
             if (nemfjoldisbr1 > 15) {
               nemfjoldisbr1 -= 1;
-              update(nemfjoldisbr1,afangafjoldisbr1,mynd1,data1);
+              update(nemfjoldisbr1,afangafjoldisbr1,mynd,data);
             }
             else {
              nemfjoldisbr1 = 15;
-             update(nemfjoldisbr1,afangafjoldisbr1,mynd1,data1);
+             update(nemfjoldisbr1,afangafjoldisbr1,mynd,data);
 
             }
           });
           $('#haekka1').on('click', function () {
             if (nemfjoldisbr1 < 32) {
               nemfjoldisbr1 += 1;
-              update(nemfjoldisbr1,afangafjoldisbr1,mynd1,data1);
+              update(nemfjoldisbr1,afangafjoldisbr1,mynd,data);
 
             }
             else {
               nemfjoldisbr1 = 32;
-              update(nemfjoldisbr1,afangafjoldisbr1,mynd1,data1);
+              update(nemfjoldisbr1,afangafjoldisbr1,mynd,data);
             }
           });  
           $('#fjorir1').on('click', function () {
             afangafjoldisbr1 = 4;
-            update(nemfjoldisbr1,afangafjoldisbr1,mynd1,data1);
+            update(nemfjoldisbr1,afangafjoldisbr1,mynd,data);
           });
           $('#fimm1').on('click', function () {
             afangafjoldisbr1 = 5;
-            update(nemfjoldisbr1,afangafjoldisbr1,mynd1,data1);
+            update(nemfjoldisbr1,afangafjoldisbr1,mynd,data);
 
-          });*/
+          });
 
         };//end of draw
         

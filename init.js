@@ -2,7 +2,7 @@
 
 (
   function(exports) {
-          exports.name = "mynd1";
+          exports.name = "mynd";
           exports.margin = 60;
           exports.width = 1000 - exports.margin;
           exports.height = 600 - exports.margin;
@@ -36,7 +36,7 @@
           // ordinal axis
           exports.ordinal_scale = d3.scale.ordinal()
           .rangePoints([exports.margin, exports.width-exports.margin])
-          .domain(['','30 ára-','30-37 ára','38-54 ára','55-59 ára','60 ára+']);
+          .domain(['','Stærðfræði','Tungumál','Félagsgreinar','Íslenska','Raungreinar']);
           
 
           exports.ordinal_axis = d3.svg.axis()
@@ -117,16 +117,19 @@
                             
               }
           exports.x = function(d) {
-                if (d['synidaemi'] == 'Stærðfræði')
-                  return exports.ordinal_scale(d['aldursflokkur'])- 40;
-                else if (d['synidaemi'] == 'Tungumál')
-                  return exports.ordinal_scale(d['aldursflokkur']) - 30;
-                else if (d['synidaemi'] == 'Félagsgreinar')
-                  return exports.ordinal_scale(d['aldursflokkur'])-20;  
-                else if (d['synidaemi'] == 'Íslenska')
-                  return exports.ordinal_scale(d['aldursflokkur'])-10 ; 
-                else
-                  return exports.ordinal_scale(d['aldursflokkur']); 
+               
+                  var r = exports.ordinal_scale(d['synidaemi']); 
+                  if (d['aldursflokkur'] == '60 ára+')
+                    return r;
+                  else if (d['aldursflokkur'] == '55-59 ára')
+                    return r-20;
+                  else if (d['aldursflokkur'] == '38-54 ára')
+                    return r-30;
+                  else if (d['aldursflokkur'] == '30-37 ára')
+                    return r-40;
+                  else
+                    return r -50;
+
           }
           exports.tooltipFunction = function(tooltip,data,id,item) {
               
@@ -148,4 +151,4 @@
           exports.pr_scale = function(d) {
               return this.percentage_scale(d['mismunur1']);
             };
-})(this.mynd1 = {})
+})(this.mynd = {})
