@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Launamunur</title>
+  <title>Hækkanir</title>
   <!--<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic" rel="stylesheet" type="text/css">-->
   
   <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
@@ -30,7 +30,11 @@
         fill: none;
         stroke: black;
       }
-
+      rect.shadow {
+        opacity: 0.5;
+        stroke: black;
+        stroke-width: 1;
+      }
       circle {
         opacity: 1;
         stroke: black;
@@ -147,9 +151,12 @@
     .well > p {
        font-size: 20px;
     }
+    .well > a {
+      font-size: 20px;
+    }
     a {
       color: rgba(69,117,180,1);
-      font-size: 24px;
+      font-size: 16px;
     }
     a:hover {
       background-color: transparent;
@@ -241,17 +248,45 @@
     <div class="main">
       <div class="well well-lg">
         <div class="page-header">
-          <h1>Aldursbundinn launamunur <small>Unnar Þór Bachmann, trúnaðarmaður við FÁ</small></h1>
+          <h1>Hækkanir og hagræðingamöguleikar <small>Unnar Þór Bachmann, trúnaðarmaður við FÁ</small></h1>
+        </div>
+          <div class="texti">
+          <h2>Launahækkanir</h2>
+          <p>Núverandi kjarasamningur FF og ríkisins hefur skilað hækkunum á grunnlaunum launaflokka fimm til tíu um 47-50%. Þá er vitskuld ekki tekið tillit til nemendafjölda né vinnuskyldu. Skoðum <a href="http://www2.fa.is/vinnumat/kjaramal/">líkanið</a> út frá launahækkunum 2013. Gráa línan sýnir hækkanir á grunnkaupi eina og sér. Þegar nemendafjöldi hópum hefur náð 21 er launahækkanir umfram graunnkaupshækkunina í flestum tilvikum. Takið eftir aldursbjaganum og því að laun hafa vaxið hlutfallslega meira eftir því sem nemendur bætast við eða ef hópum er fjölgað úr fjórum í fimm. Laun kennara hækka hlutfallslega meira sem annað hvort sækja í yfirvinnu eða fá stærri hópa. </p>
+
+          <p>Það er allt eins víst að þetta hafi þau áhrif að kennara sækist eftir fleiri hópum og stærri í stað þess að vera sáttir í 100% vinnu. Eins og umræðan var um samninginn var á sínum tíma þá var talað um að hækkun grunnlauna myndi valda því að kennarar sæktust síður eftir yfirvinnu. Nærri allir nema yngstu kennararnir græða hlutfallslega meira á að taka að sér fimmta hópinn en þeir gerðu í gamla kennslustundakerfinu svo fremi sem nemendafjöldi nái 21.</p>
+
+          <p>Verða kennarar sáttir við stóru hópana og því að bæta við sig þeim fimmta fyrir hækkandi laun? </p>
+        </div>
+        <div class="yfirtafla">
+          <div class="takkar">
+            <div class="btn-group btn-group-justified" role="group" aria-label="...">
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-primary" id="fjorir1">4 hópar</button>
+              </div>
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-primary" id="fimm1">5 hópar</button>
+              </div>
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-primary" aria-label="left" id="minnka1">
+                  <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                </button>
+              </div>
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-primary takki" aria-label="right" id="haekka1">
+                  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                </button>
+              </div>
+            </div>
+          </div>    
+          <div id="teikniflotur1">
+          </div>
         </div>
         <div class="texti">
-          <h2>Inngangur</h2>
-          <p>Frá árinu 2014 hefur launaumhverfi framhaldsskólakennara breyst mikið. Meginbreytingarnar fólu í sér upptöku svokallaðs vinnumats samfara hækkunum á grunnkaupi. Grunnkaup framhaldsskólakennara hefur hækkað um 47-50% frá árslokum 2013 sé miðað við algenga launaflokka á bilinu fimm til tíu. Það sem sjaldan er rætt er launamunur innan kennarastéttarinnar og hvort að hann sé að aukast eða ekki með tilliti til aldurs. Hvað er æskilegur eða óæskilegur launamunur? Launamunur vegna aldurs kemur til vegna þess að:</p>
-          <ol>
-            <li>Kennarar kenna oftast fjórum hópum og jafnvel fimm ef þeir sækja í yfirvinnu.</li>
-            <li>Kennarar hafa mismikla kennsluskyldu. Kennarar yfir 60 ára aldri fá um 20% afslátt af kennslu.</li>
-            <li>Í stofnanasamningum er launaflokkum úthlutað að verulegu leiti eftir kennslureynslu.</li>
-          </ol>
-        <p>Til að kanna launamun hef ég tekið saman reiknilíkan með 88 kennurum sem kenna fjóra til fimm áfanga með jöfnum fjölda nemenda. Ég raðaði þeim í launaflokka eins og algengt er að gera í stofnanasamningum skv. töflunni hér fyrir neðan. Til einföldunar hafði ég þá alla í þrepi fjögur og gerði ráð fyrir 15 vikum í kennslu eins og miðað er við í sýnidæmum.</p>
+        <h2>Frá sjónarhóli ríksins</h2>
+        Ríkið lofaði framhaldsskólunum á sínum tíma því að allur ávinningur af styttingu námstíma til stúdentsprófs myndi haldast innan kerfisins. Hins vegar hafa þau loforð verið svikin í ríkisfjármálaáætlun (sjá <a href="http://www.visir.is/g/2017170419979">hér</a>). Menntamálaráðherra er um þessar mundir að skoða möguleikana á því að sameina framhaldsskóla (sjá <a href="https://www.stjornarradid.is/efst-a-baugi/frettir/stok-frett/2017/07/05/Radist-verdur-i-itarlegar-athuganir-og-greiningar-a-stodu-framhaldsskolanna-um-land-allt">hér</a>). Slíkar sameiningar skapa kjöraðstæður fyrir ríkið til sparnaðar í kerfinu. Ekki er einungis hægt að fækka millistjórnendum heldur er líka hægt að spara með því að bjóða upp á stóra hópa og fimm hópa frekar en fjóra til handa kennurum. Því stærri sem skólarnir verða því auðveldara er að reka þessa stefnu. Áform menntamálarðaherra til að sameina FÁ og Tækniskólann, og búa þar með til skóla sem hefði orðið þrefalt stærri en næsti skóli á eftir í ársnemendum talið (sjá <a href="http://www.althingi.is/altext/144/s/0533.html">hér</a>), gefa vísbendingu um að ríkið ætli að fara þessa leið.
+
+
           <center>
             <table class="table narrow">
               <tr>
@@ -293,56 +328,11 @@
 
             </table>
             </center>
-            <p>Í líkaninu eru alls 88 kennarar. Átta kennarar sem kenna á sömu kjörum og árið 2013 í kennsluskyldukerfi og 80 sem kenna skv. núverandi kjarasamningi í vinnumati. Fjöldi kennara í kennsluskyldukerfi ræðst af aldurs- og launaflokkum. Kennarar í vinnumati kenna ýmist félagsfræði, íslensku, raungreinar, tungumál eða stærðfræði. Þar af getur hver verið &bdquo;óskertur&ldquo; (kennt öllum hópum ólík námsefni) eða &bdquo;skertur&ldquo; (kennt öllum hópum sama námsefnið). Samtals 8 sinnum 5 sinnum 2 sem gefa 80 kennara.</p>
-
-            <p>Til þess að bera hópana saman þá er notast við heildarlaun eins og þau dreifast yfir árið. Þá er yfirvinnunni dreift á sex mánuði og orlofs- og desemberuppbót á tólf.</p>
-
-            <center>
-                Heildarlaun á mánuði = grunnkaup + yfirvinnutímar &times; 0,010385 &times; grunnkaup/6 + (orlofsuppbót + desemberuppbót)/12
-            </center>
+            
 
 
         </div>
-        <div class="texti">
-          <h2>Dæmi um launamun</h2>
-          <p>Tökum dæmi af tveimur íslenskukennurum sem báðir kenna 24 kennslustundir. Annar er nýbyrjaður og er í launaflokki 5 en hinn er kominn á enda kennsluferilsins og er í launaflokki 10. Árið 2013 hafði sá yngri 24 stunda kennsluskyldu en sá eldri 19. Sá yngri hafði þá 344.817 krónur í mánaðarlaun en sá eldri 513.814 krónur. Launamunur þeirra var því 49% af launum yngri kennarans. Árið 2017 kenna þeir áfram fjórum hópum sem hver um sig inniheldur 25 nemendur og eru óskertir. Þá fær sá ungi 542.746 krónur í sinn hlut en sá eldri 873.748 krónur. Launamunurinn er þá orðinn um 61%. Launamunurinn hefur aukist um 12% af launum yngri kennarans en 24,5% af því sem hann var fyrir. Til að setja þetta í samhengi við vinnumatið þarf að fjölga í hópum unga kennarans upp í 29-30 nemendur, en halda nemendafjölda þess eldri óbreyttum, til þess að launamunur verði aftur 49%.</p>
-        </div>
-        <div class="texti">
-          <h2>Niðurstöður líkans</h2>
-          <p>Niðurstöður líkansins fyrir 15-32 nemendur eru á grafinu hér fyrir neðan. Samanburðurinn 2013 miðast við kennara undir þrítugu í launaflokki fimm og þrepi fjögur. Fyrir sýnidæmin er miðað við meðalskertan (meðaltal óskerts og fullskerts) kennara undir 30 ára aldri í launaflokki fimm og þrepi fjögur</p>
-        </div>
-        <div class="yfirtafla">
-          <div class="takkar">
-            <div class="btn-group btn-group-justified" role="group" aria-label="...">
-              <div class="btn-group" role="group">
-                <button type="button" class="btn btn-primary" id="fjorir1">4 hópar</button>
-              </div>
-              <div class="btn-group" role="group">
-                <button type="button" class="btn btn-primary" id="fimm1">5 hópar</button>
-              </div>
-              <div class="btn-group" role="group">
-                <button type="button" class="btn btn-primary" aria-label="left" id="minnka1">
-                  <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
-                </button>
-              </div>
-              <div class="btn-group" role="group">
-                <button type="button" class="btn btn-primary takki" aria-label="right" id="haekka1">
-                  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                </button>
-              </div>
-            </div>
-          </div>    
-          <div id="teikniflotur1">
-          </div>
-        </div>
-        <div class="texti">
-          <h2>Í lokin</h2>
-          <p>
-          Á grafinu hér að ofan sést glögglega að launamunur er að aukast milli aldurshópa þegar nemendafjöldinn er orðinn 21 í hverjum hópi. Áhrifin af stækkandi hópum dreifast því ójafnt með tilliti til aldurs. Ástæðuna tel ég fyrst og fremst vera þá að vinnumatskerfið er miklu kvikara þegar kemur að yfirvinnu en það gamla. Í gamla kerfinu gat þriggja eininga (oftast fimm feiningar) áfangi kenndur í yfirvinnu aldrei gefið fleiri en 140 tíma. Sambærilegur áfangi í vinnumati gefur aldrei færri en u.þ.b. 160 tíma. Á meðan hafa svo aðrar forsendur haldist óbreyttar eins og röðun í launaflokka vegna kennslureynslu og kennsluafsláttur.</p>
-
-          <p>Það er í senn skynsamlegt og réttlát að laga stöðu yngstu kennaranna. Það er réttlát krafa að sama vinna gefi sömu laun. Samt er það svo að laun hækka í flestum starfsstéttum samfara reynslu og aukinni starfshæfni. Innan FF er munurinn kominn að þolmörkum. Eins og dæmið að ofan sýnir, þá svarar aukning launamunar fyrir fjóra 25 nemenda hópa ein og sér, til þess sem með góðu móti er hægt að laga, með því að bæta nemendum í hópa þess yngri. Ólíklegt verður að teljast að ungir kennarar upplifi núverandi kjarasamning sanngjarnan. Vinnuálag þeirra vegna undirbúnings er illa metið auk þess sem ávinningur af stækkandi hópum skilar sér seint. Það liggur fyrir að fjölga þarf ungum kennurum í framhaldsskólum. Til að svo geti orðið þurfa kjör þeirra að batna. </p>
-          
-        </div>
+        
       </div>
     </div>
   </body>
@@ -351,9 +341,9 @@
   <script src="init.js"></script>
 
   <script type="text/javascript">
-      var nemfjoldisbr1 = 15;
+      var nemfjoldisbr1 = 21;
       var afangafjoldisbr1 = 4;
-      var nemfjoldisbr2 = 15;
+      var nemfjoldisbr2 = 21;
       var afangafjoldisbr2 = 4;
 
       function draw(data) {

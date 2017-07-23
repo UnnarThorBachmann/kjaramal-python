@@ -95,7 +95,26 @@
                 var aldurslitir = ["#d7191c","#fdae61","#ffffbf","#abd9e9","#2c7bb6"];
                 return aldurslitir[i];
             });
-          
+
+          //shadow
+          exports.shadow = exports.teikniflotur.append("g")
+              .attr("transform", "translate(" + exports.margin + "," + exports.percentage_scale(50) + ")")
+              .selectAll("g")
+              .data([{'width': exports.width-exports.margin, 'height': exports.percentage_scale(47)-exports.percentage_scale(50)}])
+              .enter().append("g");
+
+
+          exports.shadow.append("rect")
+            .attr("class", "shadow")
+            .attr('width',function(d) {
+              return d.width;
+            })
+            .attr('height',function(d) {
+              return d.height;
+            })
+            .style('fill','black')
+
+
           exports.legend.append("text")
               .attr("x",20)
               .attr("y", function(d,i) {
@@ -134,7 +153,7 @@
           exports.tooltipFunction = function(tooltip,data,id,item) {
               
               var item = data.filter(d=> d.key == id)[0];
-              tooltip[0][0].innerHTML = "Sýnidæmi: " + item.synidaemi + "<br>Mismunur: " + parseInt(item.mismunur1) + "%<br>";
+              tooltip[0][0].innerHTML = "Sýnidæmi: " + item.synidaemi + "<br>Launahækkun frá 2013: " + parseInt(item.mismunur1) + "%<br>";
               tooltip[0][0].innerHTML += "Launaflokkur: " + item.launaflokkur +", þrep: " + item.threp + "<br>";
               tooltip[0][0].innerHTML += "Laun: " + parseFloat(item.laun).toFixed(0) + "<br>";
               if (item.synidaemi != "2013") {
